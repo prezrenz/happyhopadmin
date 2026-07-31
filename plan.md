@@ -28,6 +28,18 @@
     - Mark as Verified
     - Cancel
 
+## Functions
+- getAllUsers()
+- getUserById(int: id)
+- getUserByVerification(bool: isVerified)
+- getUsersByRole(string: role)
+- getAllReports()
+- getReportsByHandling(bool: isHandled)
+- handleReportById(int: id)
+- deletePostById(int: id)/archivePostById(int: id)
+- getAllPosts()
+- getPostById()
+
 # ToDo
 
 - [ ] Finish Dashboard Frontend
