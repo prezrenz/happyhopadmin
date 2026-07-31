@@ -27,3 +27,20 @@
     - Detailed User View
     - Mark as Verified
     - Cancel
+
+# ToDo
+
+- [ ] Finish Dashboard Frontend
+- [ ] Finish Report Frontend
+- [ ] Finish Users Frontend
+- [ ] Implement Show Unhandled/Handled/Total Reports
+- [ ] Implement Show Unverified/Verified/Pet Owner/Vet/Total Users
+- [ ] Implement List Unhandled Reports
+- [ ] Implement List Handled Reports
+- [ ] Implement Detailed Report View
+- [ ] Implement Handle Reports
+- [ ] Implement List Unverified Users
+- [ ] Implement List All Vets
+- [ ] Implement List All Pet Owners
+- [ ] Implement Detailed User View
+- [ ] Implement Verify Users
