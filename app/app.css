@@ -17,3 +17,7 @@ body {
 #content {
     @apply flex w-5/6 h-full;
 }
+
+button {
+    cursor: pointer;
+}

@@ -42,13 +42,13 @@
 
 # ToDo
 
-- [ ] Finish Dashboard Frontend
+- [X] Finish Dashboard Frontend
 - [ ] Finish Report Frontend
 - [ ] Finish Users Frontend
-- [ ] Implement Show Unhandled/Handled/Total Reports
-- [ ] Implement Show Unverified/Verified/Pet Owner/Vet/Total Users
-- [ ] Implement List Unhandled Reports
-- [ ] Implement List Handled Reports
+- [X] Implement Show Unhandled/Handled/Total Reports
+- [X] Implement Show Unverified/Verified/Pet Owner/Vet/Total Users
+- [X] Implement List Unhandled Reports
+- [X] Implement List Handled Reports
 - [ ] Implement Detailed Report View
 - [ ] Implement Handle Reports
 - [ ] Implement List Unverified Users

@@ -1,6 +1,6 @@
 import Collapsible from "~/components/collapsible";
 import type { Route } from "./+types/reports";
-import { db } from "../../../firebase.config";
+import { db, getAllPosts, getAllReports } from "../../../firebase.config";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
@@ -9,79 +9,72 @@ export function loader() {
 }
 
 export default function Reports({ loaderData }: Route.ComponentProps) {
-    const reportsCollectionRef = collection(db, "reports");
-    const [unhandledReports, setUnhandledReports]: any[] = useState([]);
-    const usersCollectionRef = collection(db, "users");
-    const [users, getUsers]: any[] = useState([]);
-
-    const getUserById = (id: string) => {
-        for(let u of users) {
-            if(u.id == id) return u;
-        }
-    }
+    const [reports, setReports] = useState([{}]);
+    const [posts, setPosts] = useState([{}]);
 
     useEffect(() => {
-        const getReports = async () => {
-            const data = await getDocs(reportsCollectionRef);
-            data.docs.map((doc) => {
-                console.log(unhandledReports);
-                unhandledReports.push(doc.data());
-            })
-        };
+        return getAllReports(setReports);
+    }, []);
 
-        getReports();
-    }, [])
-
+    useEffect(() => {
+        return getAllPosts(setPosts);
+    }, []);
     return (
-        <>
-            <Collapsible label="Unhandled Reports">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Reported By</th>
-                            <th>Reported On</th>
-                            <th>Reasons</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {unhandledReports.map((report: any) =>
-                            (
-                                <tr key={report.id}>
-                                    <td>{getUserById(report.reportedBy)?.firstName ?? ""}</td>
-                                    <td>{report.timestamp.toString()}</td>
-                                    <td>{report?.reasons.map((item: any) => item.name).join(', ') ?? ""}</td>
-                                    <td><button>View Report</button></td>
-                                </tr>
-                            )
-                        )}
-                    </tbody>
-                </table>
-            </Collapsible>
-
-            <Collapsible label="Handled Reports">
-                <table>
-                    <tr>
-                        <th>Reported By</th>
-                        <th>Reported On</th>
-                        <th>Reasons</th>
-                        <th>Actions</th>
-                    </tr>
-                    <tr>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Inappropriate</td>
-                        <td><button>View Report</button></td>
-                    </tr>
-                    <tr>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Inappropriate</td>
-                        <td><button>View Report</button></td>
-                    </tr>
-                </table>
-            </Collapsible>
-
-        </>
+        <div>
+            <h1>Unhandled Reports</h1>
+            {
+                reports.filter((report: any) => !report?.handled).length <= 0 ?
+                    <p>All current reports are handled!</p> :
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reported On</th>
+                                <th>Reported By</th>
+                                <th>Reason</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {reports.map((report: any) => {
+                                return (
+                                    <tr>
+                                        <td>{report?.timestamp?.toDate()?.toString()}</td>
+                                        <td>{report?.reportedBy}</td>
+                                        <td>{report?.reasons?.join(", ")}</td>
+                                        <td><button>View Details</button></td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+            }
+            <h1>Handled Reports</h1>
+            {
+                reports.filter((report: any) => report?.handled).length <= 0 ?
+                    <p>No reports have been handled so far!</p> :
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reported On</th>
+                                <th>Reported By</th>
+                                <th>Reason</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {reports.map((report: any) => {
+                                return (
+                                    <tr>
+                                        <td>{report?.timestamp?.toDate()?.toString()}</td>
+                                        <td>{report?.reportedBy}</td>
+                                        <td>{report?.reasons?.join(", ")}</td>
+                                        <td><button>View Details</button></td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+            }
+        </div>
     );
 }
