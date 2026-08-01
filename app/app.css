@@ -11,9 +11,9 @@ body {
 }
 
 #sidebar {
-    @apply basis-1/6 p-4 border-1 sticky top-0;
+    @apply w-1/6 p-4 border-r-2 border-l-2 sticky top-0 bg-orange-200;
 }
 
 #content {
-    @apply basis-5/6 flex-1;
+    @apply flex w-5/6 h-full;
 }
