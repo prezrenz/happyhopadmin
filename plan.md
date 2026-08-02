@@ -29,16 +29,18 @@
     - Cancel
 
 ## Functions
-- getAllUsers()
-- getUserById(int: id)
-- getUserByVerification(bool: isVerified)
-- getUsersByRole(string: role)
-- getAllReports()
-- getReportsByHandling(bool: isHandled)
-- handleReportById(int: id)
-- deletePostById(int: id)/archivePostById(int: id)
-- getAllPosts()
-- getPostById()
+- [x] getAllUsers()
+- [x] getUserById(int: id)
+- [x] getUserByVerification(bool: isVerified)
+- [x] getUsersByRole(string: role)
+- [x] verifyUserById(int id)
+- [x] getAllReports()
+- [x] getReportsByHandling(bool: isHandled)
+- [x] getReportById(int: id)
+- [x] handleReportById(int: id)
+- [x] deletePostById(int: id)
+- [x] getAllPosts()
+- [x] getPostById()
 
 # ToDo
 

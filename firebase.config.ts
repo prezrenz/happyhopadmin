@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { collection, getDocs, getFirestore, onSnapshot, query, QuerySnapshot } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query, QuerySnapshot, updateDoc } from "firebase/firestore";
 import { browserCookiePersistence, browserSessionPersistence, getAuth, initializeAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
@@ -33,6 +33,18 @@ export const getAllUsers = (setUsers: (arg0: {}[]) => void) => {
     return unsubscribe;
 }
 
+export const getUsersByRole = (users: {}[], role: string) => {
+    return users.filter((user: any) => user?.role?.toLowerCase() == role);
+}
+
+export const getUsersByVerification = (users: {}[], isVerified: boolean) => {
+    return users.filter((user: any) => user?.verified == isVerified);
+}
+
+export const getUserById = (users: {}[], id: string) => {
+    return users.filter((user: any) => user?.id == id)[0];
+}
+
 export const getAllReports = (setReports: (arg0: {}[]) => void) => {
     const q = query(collection(db, "reports"));
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
@@ -45,6 +57,28 @@ export const getAllReports = (setReports: (arg0: {}[]) => void) => {
     return unsubscribe;
 }
 
+export const verifyUserById = async (id: string) => {
+    const user = doc(db, "users", id);
+    await updateDoc(user, {
+        verified: true
+    })
+}
+
+export const getReportById = (reports: {}[], id: string) => {
+    return reports.filter((report: any) => report?.id == id)[0];
+}
+
+export const getReportsByHandling = (reports: {}[], isHandled: boolean) => {
+    return reports.filter((report: any) => (report?.handled ? true : false) == isHandled);
+}
+
+export const handleReport = async (id: string) => {
+    const report = doc(db, "reports", id);
+    await updateDoc(report, {
+        handled: true
+    })
+}
+
 export const getAllPosts = (setPosts: (arg0: {}[]) => void) => {
     const q = query(collection(db, "posts"));
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
@@ -55,4 +89,13 @@ export const getAllPosts = (setPosts: (arg0: {}[]) => void) => {
         setPosts(fetchedPosts);
     });
     return unsubscribe;
+}
+
+export const getPostById = (posts: {}[], id: string) => {
+    return posts.filter((post: any) => post?.id == id)[0];
+}
+
+export const deletePostById = async (id: string) => {
+    const post = doc(db, "posts", id);
+    await deleteDoc(post);
 }
