@@ -51,8 +51,8 @@
 - [X] Implement Show Unverified/Verified/Pet Owner/Vet/Total Users
 - [X] Implement List Unhandled Reports
 - [X] Implement List Handled Reports
-- [ ] Implement Detailed Report View
-- [ ] Implement Handle Reports
+- [x] Implement Detailed Report View
+- [x] Implement Handle Reports
 - [ ] Implement List Unverified Users
 - [ ] Implement List All Vets
 - [ ] Implement List All Pet Owners

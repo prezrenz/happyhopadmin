@@ -20,4 +20,5 @@ body {
 
 button {
     cursor: pointer;
+    @apply border-2 p-2 m-1;
 }
