@@ -36,6 +36,11 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         handleReport(id);
     }
 
+    const getReporterName = (id: string) => {
+        const reporter: any = getUserById(users, id);
+        return reporter?.firstName + " " + reporter?.lastName;
+    }
+
     useEffect(() => {
         return getAllReports(setReports);
     }, []);
@@ -68,7 +73,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                 return (
                                     <tr key={report?.id}>
                                         <td>{report?.timestamp?.toDate()?.toString()}</td>
-                                        <td>{report?.reportedBy}</td>
+                                        <td>{getReporterName(report?.reportedBy)}</td>
                                         <td>{report?.reasons?.join(", ")}</td>
                                         <td><button onClick={() => openModal(report?.id)}>View Details</button></td>
                                     </tr>
@@ -95,7 +100,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                 return (
                                     <tr key={report?.id}>
                                         <td>{report?.timestamp?.toDate()?.toString()}</td>
-                                        <td>{report?.reportedBy}</td>
+                                        <td>{getReporterName(report?.reportedBy)}</td>
                                         <td>{report?.reasons?.join(", ")}</td>
                                         <td><button onClick={() => openModal(report?.id)}>View Details</button></td>
                                     </tr>
