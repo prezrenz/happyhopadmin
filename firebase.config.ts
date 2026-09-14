@@ -129,3 +129,24 @@ export const deletePostById = async (id: string) => {
     const post = doc(db, "posts", id);
     await deleteDoc(post);
 }
+
+export const getAllVetPins = (setPins: (arg0: {}[]) => void) => {
+    const q = query(collection(db, "vetPins"));
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedPins: {}[] = [];
+        QuerySnapshot.forEach((doc) => {
+            fetchedPins.push({ ...doc.data(), id: doc.id });
+        });
+        setPins(fetchedPins);
+    });
+    return unsubscribe;
+}
+
+export const getPinsById = (pins: {}[], id: string) => {
+    return pins.filter((pin: any) => pin?.vetId == id);
+}
+
+export const deletePinById = async (id: string) => {
+    const pin = doc(db, "vetPins", id);
+    await deleteDoc(pin);
+}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAllPosts, getAllUsers, getAllVerificationRequests, getUserById, getVerificationRequestById, handleVerificationRequest, unverifyUserById, verifyUserById } from "../../../firebase.config";
+import { deletePinById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifyUserById, verifyUserById } from "../../../firebase.config";
 import type { Route } from "./+types/users";
 import Modal from "~/components/modal";
+import WideModal from "~/components/wideModal";
 
 export function loader() {
     return { name: "React Router" };
@@ -11,7 +12,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     const [users, setUsers] = useState([{}]);
     const [verificationRequests, setVerificationRequests] = useState([{}]);
     const [posts, setPosts] = useState([{}]);
+    const [pins, setPins] = useState([{}]);
     const [currentUser, setCurrentUser] = useState<any>({});
+    const [currentPins, setCurrentPins] = useState([{}])
     const [currentRequest, setCurrentRequest] = useState<any>({});
     const [isModalOpen, setModalOpen] = useState(false);
     const [isUserModalOpen, setUserModalOpen] = useState(false);
@@ -22,6 +25,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     }
 
     const closeModal = () => {
+        setCurrentRequest(null);
         setModalOpen(false);
     }
 
@@ -31,6 +35,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     }
 
     const closeUserModal = () => {
+        setCurrentUser(null);
+        setCurrentPins([{}]);
         setUserModalOpen(false);
     }
 
@@ -50,6 +56,11 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         return submitter?.firstName + " " + submitter?.lastName;
     }
 
+    const deleteMapPin = (id: string) => {
+        deletePinById(id);
+        closeUserModal();
+    }
+
     useEffect(() => {
         return getAllPosts(setPosts);
     }, []);
@@ -57,10 +68,22 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     useEffect(() => {
         return getAllUsers(setUsers);
     }, []);
-    
+
     useEffect(() => {
         return getAllVerificationRequests(setVerificationRequests);
     }, []);
+
+    useEffect(() => {
+        return getAllVetPins(setPins);
+    }, []);
+
+    useEffect(() => {
+        if (currentUser?.verified) {
+            setCurrentPins(getPinsById(pins, currentUser?.id));
+        } else {
+            setCurrentPins([{}]);
+        }
+    }, [currentUser]);
 
     return (
         <div>
@@ -141,25 +164,57 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                     }
                 </div>
             </Modal>
-            <Modal isOpen={isUserModalOpen}>
-                <div className="flex flex-col justify-center">
+            <WideModal isOpen={isUserModalOpen}>
+                <div className="flex flex-row">
+                    <div className="flex flex-col justify-center">
+                        <div className="flex flex-row">
+                            <b>Full Name: </b>
+                            <p>{currentUser?.firstName} {currentUser?.lastName}</p>
+                        </div>
+                        <div className="flex flex-row">
+                            <b>Username: </b>
+                            {currentUser?.username}
+                        </div>
+                        <div className="flex flex-row">
+                            <b>Email: </b>
+                            {currentUser?.email}
+                        </div>
+                    </div>
                     {
                         (currentUser?.imageUrl) &&
-                        <img src={currentUser?.imageUrl} />
+                        <img className="object-scale-down max-w-1/12 m-auto" src={currentUser?.imageUrl} />
                     }
-                    <div className="flex flex-row">
-                        <b>Full Name: </b>
-                        <p>{currentUser?.firstName} {currentUser?.lastName}</p>
-                    </div>
-                    <div className="flex flex-row">
-                        <b>Username: </b>
-                        {currentUser?.username}
-                    </div>
-                    <div className="flex flex-row">
-                        <b>Email: </b>
-                        {currentUser?.email}
-                    </div>
                 </div>
+                <h1>Vet Map Pins</h1>
+                {
+                    currentPins.length <= 0 ?
+                        <p>This user has no map pins.</p> :
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Submitted At</th>
+                                    <th>Clinic Name</th>
+                                    <th>Type</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentPins.map((pin: any) => {
+                                    return (
+                                        <tr key={pin?.id}>
+                                            <td>{pin?.submittedAt?.toDate()?.toString()}</td>
+                                            <td>{pin?.clinicName}</td>
+                                            <td>{pin?.type}</td>
+                                            <td>{pin?.latitude}</td>
+                                            <td>{pin?.longitude}</td>
+                                            <td><button onClick={() => deleteMapPin(pin?.id)}>Delete</button></td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                }
                 <div className="flex flex-row">
                     <button onClick={closeUserModal}>Close</button>
                     {
@@ -167,7 +222,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         <button onClick={() => removeVerificationStatus(currentUser?.id)}>Remove Verification</button>
                     }
                 </div>
-            </Modal>
+            </WideModal>
         </div>
     );
 }
