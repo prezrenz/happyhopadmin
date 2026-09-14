@@ -45,6 +45,22 @@ export const getUserById = (users: {}[], id: string) => {
     return users.filter((user: any) => user?.id == id)[0];
 }
 
+export const getAllVerificationRequests = (setVerificationRequests: (arg0: {}[]) => void) => {
+    const q = query(collection(db, "verificationRequests"));
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedRequests: {}[] = [];
+        QuerySnapshot.forEach((doc) => {
+            fetchedRequests.push({ ...doc.data(), id: doc.id });
+        });
+        setVerificationRequests(fetchedRequests);
+    });
+    return unsubscribe;
+}
+
+export const getVerificationRequestById = (requests: {}[], id: string) => {
+    return requests.filter((request: any) => request?.id == id)[0];
+}
+
 export const getAllReports = (setReports: (arg0: {}[]) => void) => {
     const q = query(collection(db, "reports"));
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
@@ -57,10 +73,24 @@ export const getAllReports = (setReports: (arg0: {}[]) => void) => {
     return unsubscribe;
 }
 
+export const handleVerificationRequest = async (id: string) => {
+    const request = doc(db, "verificationRequests", id);
+    await updateDoc(request, {
+        status: "approved"
+    })
+}
+
 export const verifyUserById = async (id: string) => {
     const user = doc(db, "users", id);
     await updateDoc(user, {
         verified: true
+    })
+}
+
+export const unverifyUserById = async (id: string) => {
+    const user = doc(db, "users", id);
+    await updateDoc(user, {
+        verified: false
     })
 }
 

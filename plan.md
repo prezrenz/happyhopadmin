@@ -53,8 +53,5 @@
 - [X] Implement List Handled Reports
 - [x] Implement Detailed Report View
 - [x] Implement Handle Reports
-- [ ] Implement List Unverified Users
-- [ ] Implement List All Vets
-- [ ] Implement List All Pet Owners
-- [ ] Implement Detailed User View
-- [ ] Implement Verify Users
+- [X] Implement Detailed User View
+- [X] Implement Verify Users
