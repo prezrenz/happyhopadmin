@@ -33,7 +33,7 @@ export default function login() {
     return (
         <div className="bg-orange-50 flex-col w-full text-center justify-center content-center items-center place-items-center">
             <div className="bg-orange-100 border p-4 rounded-2xl place-items-center">
-                <img className="object-center w-48 h-auto" src="app/assets/logo.png" />
+                <img className="object-center w-48 h-auto" src="/logo.png" />
                 <h1 className="font-bold text-2xl">Login</h1>
                 <h2 className="font-bold">Admin Email</h2>
                 <input className="bg-orange-200 border m-2 p-2 rounded-2xl" onChange={(e) => setEmail(e.target.value)} />
