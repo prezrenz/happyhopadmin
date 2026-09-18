@@ -54,8 +54,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     }, []);
 
     return (
-        <div>
-            <h1>Unhandled Reports</h1>
+        <div className="flex flex-col items-center">
+            <h1 className="font-bold text-2xl">Unhandled Reports</h1>
             {
                 reports.filter((report: any) => !report?.handled).length <= 0 ?
                     <p>All current reports are handled!</p> :
@@ -82,7 +82,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         </tbody>
                     </table>
             }
-            <h1>Handled Reports</h1>
+            <h1 className="font-bold text-2xl">Handled Reports</h1>
             {
                 reports.filter((report: any) => report?.handled).length <= 0 ?
                     <p>No reports have been handled so far!</p> :

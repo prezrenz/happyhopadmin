@@ -11,7 +11,7 @@ body {
 }
 
 #sidebar {
-    @apply w-1/6 p-4 border-r-2 border-l-2 sticky top-0 bg-orange-200;
+    @apply w-2/6 p-4 border-r-2 border-l-2 sticky top-0 bg-orange-200;
 }
 
 #content {
@@ -20,5 +20,13 @@ body {
 
 button {
     cursor: pointer;
-    @apply border-2 p-2 m-1;
+    @apply border-2 p-2 m-1 rounded-md;
+}
+
+table {
+    @apply table-auto border-separate border-spacing-2 border rounded-md;
+}
+
+tbody {
+    @apply divide-black;
 }

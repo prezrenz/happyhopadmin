@@ -15,11 +15,14 @@ export default function AdminLayout() {
     return (
         <>
             <main className="w-full flex flex-col">
-                <div className="border-2 bg-orange-400 p-4 font-bold text-4xl place-content-start">
-                    HappyHop Admin
-                </div>
                 <div className="h-full flex flex-row">
                     <aside id="sidebar">
+                        <div className="flex flex-row items-center">
+                            <img className="object-scale-down w-16 h-auto p-1" src="/logo.png" />
+                            <div className="p-1 font-bold">
+                                HappyHop Admin
+                            </div>
+                        </div>
                         <nav>
                             <ul>
                                 <li className="hover:font-bold">
@@ -53,7 +56,7 @@ export default function AdminLayout() {
                         </nav>
                         <button className="hover:font-bold" onClick={() => signOut(auth)}>Logout</button>
                     </aside>
-                    <div className="content bg-orange-50 w-full">
+                    <div className="content bg-orange-50 w-full p-2">
                         <Outlet />
                     </div>
                 </div>

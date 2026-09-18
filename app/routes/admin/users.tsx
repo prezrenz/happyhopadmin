@@ -86,8 +86,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     }, [currentUser]);
 
     return (
-        <div>
-            <h1>Users</h1>
+        <div className="flex flex-col items-center">
+            <h1 className="font-bold text-2xl">Users</h1>
             {
                 users.length <= 0 ?
                     <p>There are currently no users.</p> :
@@ -116,7 +116,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         </tbody>
                     </table>
             }
-            <h1>Verification Requests</h1>
+            <h1 className="font-bold text-2xl">Verification Requests</h1>
             {
                 verificationRequests.length <= 0 ?
                     <p>No Verification Requests so far.</p> :
@@ -185,9 +185,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         <img className="object-scale-down max-w-1/12 m-auto" src={currentUser?.imageUrl} />
                     }
                 </div>
-                <h1>Vet Map Pins</h1>
+                <h1 className="font-bold text-2xl">Vet Map Pins</h1>
                 {
-                    currentPins.length <= 0 ?
+                    (currentPins.length <= 0) || (!currentUser?.verified) ?
                         <p>This user has no map pins.</p> :
                         <table>
                             <thead>
