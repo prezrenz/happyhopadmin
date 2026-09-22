@@ -11,11 +11,15 @@ body {
 }
 
 #sidebar {
-    @apply w-2/6 p-4 border-r-2 border-l-2 sticky top-0 bg-orange-200;
+    @apply flex flex-none flex-col overflow-y-clip w-64 h-svh p-4 border-r-1 sticky top-0 bg-orange-200;
 }
 
 #content {
-    @apply flex w-5/6 h-full;
+    @apply flex flex-1;
+}
+
+NavLink {
+    @apply rounded-2xl
 }
 
 button {

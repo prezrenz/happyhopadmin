@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router";
 import { auth } from "../../../firebase.config";
 import { getAuth, signOut } from "firebase/auth";
+import { MdHome } from "react-icons/md";
 
 export default function AdminLayout() {
     const navigate = useNavigate()
@@ -23,38 +24,41 @@ export default function AdminLayout() {
                                 HappyHop Admin
                             </div>
                         </div>
-                        <nav>
-                            <ul>
-                                <li className="hover:font-bold">
-                                    <NavLink to="/admin" end style={({ isActive }) => {
-                                        return {
-                                            fontWeight: isActive ? "bold" : ""
-                                        }
-                                    }}>
-                                        Dashboard
-                                    </NavLink>
-                                </li>
-                                <li className="hover:font-bold">
-                                    <NavLink to="/admin/reports" end style={({ isActive }) => {
-                                        return {
-                                            fontWeight: isActive ? "bold" : ""
-                                        }
-                                    }}>
-                                        Reports
-                                    </NavLink>
-                                </li>
-                                <li className="hover:font-bold">
-                                    <NavLink to="/admin/users" end style={({ isActive }) => {
-                                        return {
-                                            fontWeight: isActive ? "bold" : ""
-                                        }
-                                    }}>
-                                        Users
-                                    </NavLink>
-                                </li>
-                            </ul>
+                        <nav className="flex flex-1 flex-col">
+                            <NavLink to="/admin" end style={({ isActive }) => {
+                                return {
+                                    fontWeight: isActive ? "bold" : "",
+                                    backgroundColor: isActive ? "orange" : "",
+                                    borderRadius: "8px",
+                                    padding: "8px"
+                                }
+                            }}>
+                                Dashboard
+                            </NavLink>
+                            <NavLink to="/admin/reports" end style={({ isActive }) => {
+                                return {
+                                    fontWeight: isActive ? "bold" : "",
+                                    backgroundColor: isActive ? "orange" : "",
+                                    borderRadius: "8px",
+                                    padding: "8px"
+                                }
+                            }}>
+                                Reports
+                            </NavLink>
+                            <NavLink to="/admin/users" end style={({ isActive }) => {
+                                return {
+                                    fontWeight: isActive ? "bold" : "",
+                                    backgroundColor: isActive ? "orange" : "",
+                                    borderRadius: "8px",
+                                    padding: "8px"
+                                }
+                            }}>
+                                Users
+                            </NavLink>
                         </nav>
-                        <button className="hover:font-bold" onClick={() => signOut(auth)}>Logout</button>
+                        <div className="flex flex-row p-4">
+                            <button className="hover:font-bold w-full" onClick={() => signOut(auth)}>Logout</button>
+                        </div>
                     </aside>
                     <div className="content bg-orange-50 w-full p-2">
                         <Outlet />
