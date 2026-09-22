@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deletePinById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifyUserById, verifyUserById } from "../../../firebase.config";
+import { deletePinById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifySupplierUserById, unverifyUserById, unverifyVetUserById, verifyUserById } from "../../../firebase.config";
 import type { Route } from "./+types/users";
 import Modal from "~/components/modal";
 import WideModal from "~/components/wideModal";
@@ -46,9 +46,32 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         closeModal();
     }
 
-    const removeVerificationStatus = (id: string) => {
-        unverifyUserById(id);
+    const removeVerificationStatus = (id: string, type: string) => {
+        switch(type) {
+            case "verified":
+            case "verifiedVet":
+                unverifyUserById(id);
+                unverifyVetUserById(id);
+                break;
+            case "verifiedFeedSupplier":
+                unverifySupplierUserById(id);
+                break;
+        }
         closeUserModal();
+    }
+
+    const getVerifications = (id: string) => {
+        const user: any = getUserById(users, id);
+        var verifications: string[] = [];
+        if(user?.verified || user?.verifiedVet) {
+            verifications.push("Veterinarian");
+        } else if(user?.verifiedFeedSupplier) {
+            verifications.push("Feed Supplier");
+        } else {
+            return "This user has no verifications.";
+        }
+
+        return verifications.join(", ");
     }
 
     const getSubmitterName = (id: string) => {
@@ -108,7 +131,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                         <td>{user?.email}</td>
                                         <td>{user?.firstName + " " + user?.lastName}</td>
                                         <td>{user.username}</td>
-                                        <td>{user?.verified ? "✓" : "x"}</td>
+                                        <td>{user?.verified || user?.verifiedVet || user?.verifiedFeedSupplier ? "✓" : "x"}</td>
                                         <td><button onClick={() => openUserModal(user?.id)}>View Details</button></td>
                                     </tr>
                                 )
@@ -179,6 +202,10 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                             <b>Email: </b>
                             {currentUser?.email}
                         </div>
+                        <div className="flex flex-row">
+                            <b>Verifications: </b>
+                            {getVerifications(currentUser?.id)}
+                        </div>
                     </div>
                     {
                         (currentUser?.imageUrl) &&
@@ -203,9 +230,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                 {currentPins.map((pin: any) => {
                                     return (
                                         <tr key={pin?.id}>
-                                            <td>{pin?.submittedAt?.toDate()?.toString()}</td>
                                             <td>{pin?.clinicName}</td>
-                                            <td>{pin?.type}</td>
+                                            <td>{(pin?.type === "vet") ? "Veterinary Clinic" : "Feed Supplier"}</td>
                                             <td>{pin?.latitude}</td>
                                             <td>{pin?.longitude}</td>
                                             <td><button onClick={() => deleteMapPin(pin?.id)}>Delete</button></td>
@@ -218,8 +244,12 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                 <div className="flex flex-row">
                     <button onClick={closeUserModal}>Close</button>
                     {
-                        (currentUser?.verified) &&
-                        <button onClick={() => removeVerificationStatus(currentUser?.id)}>Remove Verification</button>
+                        (currentUser?.verified || currentUser?.verifiedVet) &&
+                        <button onClick={() => removeVerificationStatus(currentUser?.id, "verified")}>Remove Veterinarian Verification</button>
+                    }
+                    {
+                        (currentUser?.verifiedFeedSupplier) &&
+                        <button onClick={() => removeVerificationStatus(currentUser?.id, "verifiedFeedSupplier")}>Remove Feed Supplier Verification</button>
                     }
                 </div>
             </WideModal>
