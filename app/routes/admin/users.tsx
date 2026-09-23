@@ -107,7 +107,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     }, []);
 
     useEffect(() => {
-        if (currentUser?.verified) {
+        if (currentUser?.verified || currentUser?.verifiedFeedSupplier) {
             setCurrentPins(getPinsById(pins, currentUser?.id));
         } else {
             setCurrentPins([{}]);
@@ -224,9 +224,11 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         <img className="object-scale-down max-w-1/12 m-auto" src={currentUser?.imageUrl} />
                     }
                 </div>
-                <h1 className="font-bold text-2xl">Vet Map Pins</h1>
+                <h1 className="font-bold text-2xl">
+                    {currentUser?.verifiedFeedSupplier ? "Feed Supplier Map Pins" : "Vet Map Pins"}
+                </h1>
                 {
-                    (currentPins.length <= 0) || (!currentUser?.verified) ?
+                    (currentPins.length <= 0) || (!currentUser?.verified && !currentUser?.verifiedFeedSupplier) ?
                         <p>This user has no map pins.</p> :
                         <table>
                             <thead>
