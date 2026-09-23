@@ -25,6 +25,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     const [editLatitude, setEditLatitude] = useState("");
     const [editLongitude, setEditLongitude] = useState("");
 
+    const [searchInput, setSearchInput] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+
     const openModal = (id: string) => {
         setCurrentRequest(getVerificationRequestById(verificationRequests, id));
         setModalOpen(true);
@@ -146,6 +149,26 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         closeEditPinModal();
     }
 
+    const runSearch = () => {
+        setSearchQuery(searchInput);
+    }
+
+    const clearSearch = () => {
+        setSearchInput("");
+        setSearchQuery("");
+    }
+
+    const getFilteredUsers = () => {
+        if (!searchQuery.trim()) return users;
+        const query = searchQuery.trim().toLowerCase();
+        return users.filter((user: any) => {
+            const fullName = `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.toLowerCase();
+            const username = (user?.username ?? "").toLowerCase();
+            const email = (user?.email ?? "").toLowerCase();
+            return fullName.includes(query) || username.includes(query) || email.includes(query);
+        });
+    }
+
     useEffect(() => {
         return getAllPosts(setPosts);
     }, []);
@@ -220,9 +243,27 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     return (
         <div className="flex flex-col items-center gap-6 p-6">
             <h1 className="font-bold text-2xl">Users</h1>
+            <div className="flex flex-row gap-2">
+                <input
+                    className="border border-black rounded-lg px-2 py-1"
+                    placeholder="Search by name, username, or email"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && runSearch()}
+                />
+                <button className="px-3 py-1 border border-black rounded-lg" onClick={runSearch}>
+                    Search
+                </button>
+                {
+                    searchQuery &&
+                    <button className="px-3 py-1 border border-black rounded-lg" onClick={clearSearch}>
+                        Clear
+                    </button>
+                }
+            </div>
             {
-                users.length <= 0 ?
-                    <p>There are currently no users.</p> :
+                getFilteredUsers().length <= 0 ?
+                    <p>{searchQuery ? "No users match your search." : "There are currently no users."}</p> :
                     <table className="border border-black rounded-2xl overflow-hidden">
                         <thead>
                             <tr className="border-b border-black">
@@ -235,7 +276,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-black">
-                            {users.map((user: any) => {
+                            {getFilteredUsers().map((user: any) => {
                                 return (
                                     <tr key={user?.id}>
                                         <td className="px-4 py-2">{user?.email}</td>
