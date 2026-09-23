@@ -193,3 +193,24 @@ export const approveVetRecommendation = async (id: string) => {
         approvedBy: auth.currentUser?.uid ?? null
     })
 }
+
+export const getAllVetImageSubmissions = (setSubmissions: (arg0: {}[]) => void) => {
+    const q = query(collection(db, "vetImageSubmissions"));
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedSubmissions: {}[] = [];
+        QuerySnapshot.forEach((doc) => {
+            fetchedSubmissions.push({ ...doc.data(), id: doc.id });
+        });
+        setSubmissions(fetchedSubmissions);
+    });
+    return unsubscribe;
+}
+
+export const getVetImageSubmissionById = (submissions: {}[], id: string) => {
+    return submissions.filter((sub: any) => sub?.id == id)[0];
+}
+
+export const deleteVetImageSubmissionById = async (id: string) => {
+    const submission = doc(db, "vetImageSubmissions", id);
+    await deleteDoc(submission);
+}
