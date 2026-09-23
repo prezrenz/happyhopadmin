@@ -2,8 +2,6 @@ import { initializeApp } from "firebase/app";
 import { collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query, QuerySnapshot, updateDoc } from "firebase/firestore";
 import { browserCookiePersistence, browserSessionPersistence, getAuth, initializeAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyDT4VpLuZQCmUHteVb8qz_okIumGjLRYZM",
     authDomain: "bunnycare-93a65.firebaseapp.com",
@@ -15,7 +13,6 @@ const firebaseConfig = {
     measurementId: "G-MHL3RG6YGS"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
@@ -84,6 +81,13 @@ export const verifyUserById = async (id: string) => {
     const user = doc(db, "users", id);
     await updateDoc(user, {
         verified: true
+    })
+}
+
+export const verifySupplierUserById = async (id: string) => {
+    const user = doc(db, "users", id);
+    await updateDoc(user, {
+        verifiedFeedSupplier: true
     })
 }
 
@@ -163,4 +167,29 @@ export const getPinsById = (pins: {}[], id: string) => {
 export const deletePinById = async (id: string) => {
     const pin = doc(db, "vetPins", id);
     await deleteDoc(pin);
+}
+
+export const getAllVetRecommendations = (setRecommendations: (arg0: {}[]) => void) => {
+    const q = query(collection(db, "vetRecommendations"));
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedRecommendations: {}[] = [];
+        QuerySnapshot.forEach((doc) => {
+            fetchedRecommendations.push({ ...doc.data(), id: doc.id });
+        });
+        setRecommendations(fetchedRecommendations);
+    });
+    return unsubscribe;
+}
+
+export const getVetRecommendationById = (recommendations: {}[], id: string) => {
+    return recommendations.filter((rec: any) => rec?.id == id)[0];
+}
+
+export const approveVetRecommendation = async (id: string) => {
+    const recommendation = doc(db, "vetRecommendations", id);
+    await updateDoc(recommendation, {
+        approved: true,
+        status: "approved",
+        approvedBy: auth.currentUser?.uid ?? null
+    })
 }
