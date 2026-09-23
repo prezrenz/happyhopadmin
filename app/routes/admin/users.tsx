@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deletePinById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifySupplierUserById, unverifyUserById, unverifyVetUserById, verifyUserById } from "../../../firebase.config";
+import { deletePinById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifySupplierUserById, unverifyUserById, unverifyVetUserById, verifySupplierUserById, verifyUserById } from "../../../firebase.config";
 import type { Route } from "./+types/users";
 import Modal from "~/components/modal";
 import WideModal from "~/components/wideModal";
@@ -40,9 +40,13 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         setUserModalOpen(false);
     }
 
-    const approveVerificationRequest = (requestId: string, requesterId: string) => {
+    const approveVerificationRequest = (requestId: string, requesterId: string, verificationType: string) => {
         handleVerificationRequest(requestId);
-        verifyUserById(requesterId);
+        if (verificationType === "feed_supplier") {
+            verifySupplierUserById(requesterId);
+        } else {
+            verifyUserById(requesterId);
+        }
         closeModal();
     }
 
@@ -65,9 +69,11 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         var verifications: string[] = [];
         if(user?.verified || user?.verifiedVet) {
             verifications.push("Veterinarian");
-        } else if(user?.verifiedFeedSupplier) {
+        }
+        if(user?.verifiedFeedSupplier) {
             verifications.push("Feed Supplier");
-        } else {
+        }
+        if(verifications.length <= 0) {
             return "This user has no verifications.";
         }
 
@@ -149,6 +155,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                 <th>Submitted At</th>
                                 <th>User Email</th>
                                 <th>Name</th>
+                                <th>Type</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -159,6 +166,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                         <td>{request?.submittedAt?.toDate()?.toString()}</td>
                                         <td>{request?.userEmail}</td>
                                         <td>{getSubmitterName(request?.userId)}</td>
+                                        <td>{request?.verificationType === "feed_supplier" ? "Feed Supplier" : "Veterinarian"}</td>
                                         <td>{request?.status}</td>
                                         <td><button onClick={() => openModal(request?.id)}>View Details</button></td>
                                     </tr>
@@ -177,13 +185,17 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         <b>Submission Date: </b>
                         {currentRequest?.submittedAt?.toDate()?.toString()}
                     </div>
+                    <div className="flex flex-row">
+                        <b>Type: </b>
+                        {currentRequest?.verificationType === "feed_supplier" ? "Feed Supplier" : "Veterinarian"}
+                    </div>
                     <img src={currentRequest?.licenseImageUrl} />
                 </div>
                 <div className="flex flex-row">
                     <button onClick={closeModal}>Close</button>
                     {
                         (currentRequest?.status === "pending") &&
-                        <button onClick={() => approveVerificationRequest(currentRequest?.id, currentRequest?.userId)}>Approve</button>
+                        <button onClick={() => approveVerificationRequest(currentRequest?.id, currentRequest?.userId, currentRequest?.verificationType)}>Approve</button>
                     }
                 </div>
             </Modal>

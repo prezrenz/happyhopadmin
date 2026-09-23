@@ -8,14 +8,14 @@ export function loader() {
 }
 
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
-    const [users, setUsers] = useState([{}]);
-    const [reports, setReports] = useState([{}]);
-    const [posts, setPosts] = useState([{}]);
+    const [users, setUsers] = useState<any[]>([]);
+    const [reports, setReports] = useState<any[]>([]);
+    const [posts, setPosts] = useState<any[]>([]);
 
     useEffect(() => {
         return getAllUsers(setUsers);
     }, []);
-    
+
     useEffect(() => {
         return getAllReports(setReports);
     }, []);
@@ -26,7 +26,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 
 
     return (
-        <div className="p-4 gap-16 grid grid-cols-3 place-content-center justify-center align-center">
+        <div className="p-4 gap-36 grid grid-cols-3 place-content-center justify-center align-center">
             <Card mainText={getReportsByHandling(reports, false).length.toString()} subText={"Unhandled Reports"} />
             <Card mainText={getReportsByHandling(reports, true).length.toString()} subText={"Handled Reports"} />
             <Card mainText={reports.length.toString()} subText={"Total Reports"} />
