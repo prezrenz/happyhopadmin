@@ -101,20 +101,6 @@ export const unverifyUserById = async (id: string) => {
     })
 }
 
-export const unverifyVetUserById = async (id: string) => {
-    const user = doc(db, "users", id);
-    await updateDoc(user, {
-        verifiedVet: false
-    })
-}
-
-export const unverifySupplierUserById = async (id: string) => {
-    const user = doc(db, "users", id);
-    await updateDoc(user, {
-        verifiedFeedSupplier: false
-    })
-}
-
 export const getReportById = (reports: {}[], id: string) => {
     return reports.filter((report: any) => report?.id == id)[0];
 }

@@ -50,17 +50,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         closeModal();
     }
 
-    const removeVerificationStatus = (id: string, type: string) => {
-        switch(type) {
-            case "verified":
-            case "verifiedVet":
-                unverifyUserById(id);
-                unverifyVetUserById(id);
-                break;
-            case "verifiedFeedSupplier":
-                unverifySupplierUserById(id);
-                break;
-        }
+    const removeVerificationStatus = (id: string) => {
+        unverifyUserById(id);
         closeUserModal();
     }
 
@@ -137,7 +128,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                         <td>{user?.email}</td>
                                         <td>{user?.firstName + " " + user?.lastName}</td>
                                         <td>{user.username}</td>
-                                        <td>{user?.verified || user?.verifiedVet || user?.verifiedFeedSupplier ? "✓" : "x"}</td>
+                                        <td>{user?.verified ? "✓" : "x"}</td>
                                         <td><button onClick={() => openUserModal(user?.id)}>View Details</button></td>
                                     </tr>
                                 )
@@ -214,10 +205,6 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                             <b>Email: </b>
                             {currentUser?.email}
                         </div>
-                        <div className="flex flex-row">
-                            <b>Verifications: </b>
-                            {getVerifications(currentUser?.id)}
-                        </div>
                     </div>
                     {
                         (currentUser?.imageUrl) &&
@@ -242,8 +229,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                 {currentPins.map((pin: any) => {
                                     return (
                                         <tr key={pin?.id}>
+                                            <td>{pin?.submittedAt?.toDate()?.toString()}</td>
                                             <td>{pin?.clinicName}</td>
-                                            <td>{(pin?.type === "vet") ? "Veterinary Clinic" : "Feed Supplier"}</td>
+                                            <td>{pin?.type}</td>
                                             <td>{pin?.latitude}</td>
                                             <td>{pin?.longitude}</td>
                                             <td><button onClick={() => deleteMapPin(pin?.id)}>Delete</button></td>
@@ -256,12 +244,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                 <div className="flex flex-row">
                     <button onClick={closeUserModal}>Close</button>
                     {
-                        (currentUser?.verified || currentUser?.verifiedVet) &&
-                        <button onClick={() => removeVerificationStatus(currentUser?.id, "verified")}>Remove Veterinarian Verification</button>
-                    }
-                    {
-                        (currentUser?.verifiedFeedSupplier) &&
-                        <button onClick={() => removeVerificationStatus(currentUser?.id, "verifiedFeedSupplier")}>Remove Feed Supplier Verification</button>
+                        (currentUser?.verified) &&
+                        <button onClick={() => removeVerificationStatus(currentUser?.id)}>Remove Verification</button>
                     }
                 </div>
             </WideModal>
