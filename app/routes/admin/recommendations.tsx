@@ -70,167 +70,207 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
     );
 
     return (
-        <div className="flex min-h-full flex-col items-center gap-6 bg-orange-50 p-6">
-            <h1 className="text-2xl font-bold">
-                Pending Recommendations
-            </h1>
+        <div className="flex min-h-full flex-col items-center bg-orange-50 p-4">
+            <div className="w-full max-w-5xl">
+                <h1 className="mb-3 text-center text-xl font-normal">
+                    Pending Recommendations
+                </h1>
 
-            {pendingRecommendations.length <= 0 ? (
-                <p className="text-sm text-gray-600">
-                    There are currently no pending recommendations.
-                </p>
-            ) : (
-                <div className="w-full max-w-5xl overflow-hidden rounded-lg border border-black">
-                    <table className="w-full border-collapse text-sm">
-                        <thead>
-                            <tr className="border-b border-black bg-orange-100">
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Submitted At
-                                </th>
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Vet
-                                </th>
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Breed
-                                </th>
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Status
-                                </th>
-                                <th className="px-5 py-3 text-center font-bold">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {pendingRecommendations.map((rec: any) => (
-                                <tr
-                                    key={rec?.id}
-                                    className="border-b border-black last:border-b-0"
-                                >
-                                    <td className="px-5 py-4">
-                                        {rec?.createdAt
-                                            ?.toDate()
-                                            ?.toString()}
-                                    </td>
-
-                                    <td className="px-5 py-4">
-                                        {getVetName(rec?.vetUid)}
-                                    </td>
-
-                                    <td className="px-5 py-4">
-                                        {rec?.breed}
-                                    </td>
-
-                                    <td className="px-5 py-4">
-                                        <span className="font-semibold text-orange-500">
-                                            {rec?.status}
-                                        </span>
-                                    </td>
-
-                                    <td className="px-5 py-4 text-center">
-                                        <button
-                                            className="rounded-md border border-black bg-white px-3 py-2 hover:bg-orange-100"
-                                            onClick={() =>
-                                                openModal(rec?.id)
-                                            }
-                                        >
-                                            View Details
-                                        </button>
-                                    </td>
+                {pendingRecommendations.length <= 0 ? (
+                    <p className="text-center text-sm text-gray-600">
+                        There are currently no pending recommendations.
+                    </p>
+                ) : (
+                    <div className="mx-auto w-[90%] overflow-hidden border border-black">
+                        <table className="w-full table-fixed border-collapse text-[11px]">
+                            <thead>
+                                <tr>
+                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Submitted At
+                                    </th>
+                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Vet
+                                    </th>
+                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Breed
+                                    </th>
+                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Status
+                                    </th>
+                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Actions
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+                            </thead>
 
-            <h1 className="mt-2 text-2xl font-bold">
-                Approved Recommendations
-            </h1>
+                            <tbody>
+                                {pendingRecommendations.map((rec: any) => (
+                                    <tr key={rec?.id}>
+                                        <td className="border border-black px-2 py-2 align-middle">
+                                            {rec?.createdAt
+                                                ?.toDate()
+                                                ?.toString()}
+                                        </td>
 
-            {approvedRecommendations.length <= 0 ? (
-                <p className="text-sm text-gray-600">
-                    No recommendations have been approved so far.
-                </p>
-            ) : (
-                <div className="w-full max-w-5xl overflow-hidden rounded-lg border border-black">
-                    <table className="w-full border-collapse text-sm">
-                        <thead>
-                            <tr className="border-b border-black bg-orange-100">
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Submitted At
-                                </th>
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Vet
-                                </th>
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Breed
-                                </th>
-                                <th className="px-5 py-3 text-left font-bold">
-                                    Status
-                                </th>
-                                <th className="px-5 py-3 text-center font-bold">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
+                                        <td className="border border-black px-2 py-2 text-center align-middle">
+                                            {getVetName(rec?.vetUid)}
+                                        </td>
 
-                        <tbody>
-                            {approvedRecommendations.map((rec: any) => (
-                                <tr
-                                    key={rec?.id}
-                                    className="border-b border-black last:border-b-0"
-                                >
-                                    <td className="px-5 py-4">
-                                        {rec?.createdAt
-                                            ?.toDate()
-                                            ?.toString()}
-                                    </td>
+                                        <td className="border border-black px-2 py-2 text-center align-middle">
+                                            {rec?.breed}
+                                        </td>
 
-                                    <td className="px-5 py-4">
-                                        {getVetName(rec?.vetUid)}
-                                    </td>
-
-                                    <td className="px-5 py-4">
-                                        {rec?.breed}
-                                    </td>
-
-                                    <td className="px-5 py-4">
-                                        <span className="font-semibold text-green-500">
+                                        <td className="border border-black px-2 py-2 text-center align-middle">
                                             {rec?.status}
-                                        </span>
-                                    </td>
+                                        </td>
 
-                                    <td className="px-5 py-4">
-                                        <div className="flex justify-center gap-2">
+                                        <td className="border border-black px-2 py-2 text-center align-middle">
                                             <button
-                                                className="rounded-md border border-black bg-white px-3 py-2 hover:bg-orange-100"
+                                                className="rounded border border-black bg-white px-2 py-1 text-[10px] hover:bg-orange-100"
                                                 onClick={() =>
                                                     openModal(rec?.id)
                                                 }
                                             >
                                                 View Details
                                             </button>
+                                        </td>
+                                    </tr>
+                                ))}
 
-                                            <button
-                                                className="rounded-md border border-black bg-white px-3 py-2 hover:bg-red-50"
-                                                onClick={() =>
-                                                    deleteRecommendation(
-                                                        rec?.id
-                                                    )
-                                                }
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
+                                <tr>
+                                    <td className="h-8 border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+
+                                <tr>
+                                    <td className="h-8 border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                </tr>
+
+                                <tr>
+                                    <td className="h-8 border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                <h1 className="mb-1 mt-5 text-center text-xl font-normal">
+                    Approved Recommendations
+                </h1>
+
+                {approvedRecommendations.length <= 0 ? (
+                    <p className="text-center text-[10px] text-gray-600">
+                        No recommendations have been approved so far.
+                    </p>
+                ) : (
+                    <div className="mx-auto mt-3 w-[90%] overflow-hidden border border-black">
+                        <table className="w-full table-fixed border-collapse text-[11px]">
+                            <thead>
+                                <tr>
+                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Submitted At
+                                    </th>
+                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Vet
+                                    </th>
+                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Breed
+                                    </th>
+                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Status
+                                    </th>
+                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {approvedRecommendations.map((rec: any) => (
+                                    <tr key={rec?.id}>
+                                        <td className="border border-black px-2 py-2">
+                                            {rec?.createdAt
+                                                ?.toDate()
+                                                ?.toString()}
+                                        </td>
+
+                                        <td className="border border-black px-2 py-2 text-center">
+                                            {getVetName(rec?.vetUid)}
+                                        </td>
+
+                                        <td className="border border-black px-2 py-2 text-center">
+                                            {rec?.breed}
+                                        </td>
+
+                                        <td className="border border-black px-2 py-2 text-center">
+                                            {rec?.status}
+                                        </td>
+
+                                        <td className="border border-black px-2 py-2 text-center">
+                                            <div className="flex justify-center gap-1">
+                                                <button
+                                                    className="rounded border border-black bg-white px-2 py-1 text-[10px] hover:bg-orange-100"
+                                                    onClick={() =>
+                                                        openModal(rec?.id)
+                                                    }
+                                                >
+                                                    View Details
+                                                </button>
+
+                                                <button
+                                                    className="rounded border border-black bg-white px-2 py-1 text-[10px] hover:bg-red-50"
+                                                    onClick={() =>
+                                                        deleteRecommendation(
+                                                            rec?.id
+                                                        )
+                                                    }
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                <tr>
+                                    <td className="h-8 border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                </tr>
+
+                                <tr>
+                                    <td className="h-8 border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                </tr>
+
+                                <tr>
+                                    <td className="h-8 border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                    <td className="border border-black"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
 
             <Modal isOpen={isModalOpen}>
                 <div className="mx-auto flex max-w-md flex-col gap-3 p-4">
