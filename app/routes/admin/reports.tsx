@@ -1,5 +1,13 @@
 import type { Route } from "./+types/reports";
-import { deletePostById, getAllPosts, getAllReports, getAllUsers, getPostById, getReportById, getUserById, handleReport } from "../../../firebase.config";
+import {
+    deletePostById,
+    getAllPosts,
+    getAllReports,
+    getAllUsers,
+    getPostById,
+    getUserById,
+    handleReport
+} from "../../../firebase.config";
 import { useEffect, useState } from "react";
 import ReportCard from "~/components/report-card";
 
@@ -15,7 +23,7 @@ export default function Reports() {
     const deleteAndHandleReport = (id: string, postId: string) => {
         deletePostById(postId);
         handleReport(id);
-    }
+    };
 
     useEffect(() => {
         return getAllReports(setReports);
@@ -32,32 +40,36 @@ export default function Reports() {
     return (
         <div className="flex flex-col items-center">
             <h1 className="font-bold text-2xl">Reports</h1>
-            {
-                reports.filter((report: any) => !report.handled).map((report: any) => {
+
+            {reports
+                .filter((report: any) => !report.handled)
+                .map((report: any) => {
                     return (
                         <ReportCard
+                            key={report.id}
                             report={report}
                             reporter={getUserById(users, report?.reportedBy)}
                             post={getPostById(posts, report?.postId)}
                             handleReport={handleReport}
                             deleteAndHandleReport={deleteAndHandleReport}
                         />
-                    )
-                })
-            }
-            {
-                reports.filter((report: any) => report.handled).map((report: any) => {
+                    );
+                })}
+
+            {reports
+                .filter((report: any) => report.handled)
+                .map((report: any) => {
                     return (
                         <ReportCard
+                            key={report.id}
                             report={report}
                             reporter={getUserById(users, report?.reportedBy)}
                             post={getPostById(posts, report?.postId)}
                             handleReport={handleReport}
                             deleteAndHandleReport={deleteAndHandleReport}
                         />
-                    )
-                })
-            }
+                    );
+                })}
         </div>
     );
 }

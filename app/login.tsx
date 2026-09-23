@@ -17,7 +17,7 @@ export default function login() {
     const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
-            if (email != "123user321@bunnycare.ph") {
+            if (email != "123user321@happyhop.ph") {
                 throw new Error("Please use an admin email!");
             }
             const user = await signInWithEmailAndPassword(auth, email, pass);
