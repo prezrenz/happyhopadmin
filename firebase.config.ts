@@ -194,6 +194,11 @@ export const approveVetRecommendation = async (id: string) => {
     })
 }
 
+export const deleteVetRecommendation = async (id: string) => {
+    const recommendation = doc(db, "vetRecommendations", id);
+    await deleteDoc(recommendation);
+}
+
 export const getAllVetImageSubmissions = (setSubmissions: (arg0: {}[]) => void) => {
     const q = query(collection(db, "vetImageSubmissions"));
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
