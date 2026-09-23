@@ -128,25 +128,25 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
             {
                 users.length <= 0 ?
                     <p>There are currently no users.</p> :
-                    <table>
+                    <table className="border border-black rounded-2xl overflow-hidden">
                         <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Full Name</th>
-                                <th>Username</th>
-                                <th>Verified</th>
-                                <th>Actions</th>
+                            <tr className="border-b border-black">
+                                <th className="px-4 py-2 text-left">Email</th>
+                                <th className="px-4 py-2 text-left">Full Name</th>
+                                <th className="px-4 py-2 text-left">Username</th>
+                                <th className="px-4 py-2 text-left">Verified</th>
+                                <th className="px-4 py-2 text-left">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-black">
                             {users.map((user: any) => {
                                 return (
                                     <tr key={user?.id}>
-                                        <td>{user?.email}</td>
-                                        <td>{user?.firstName + " " + user?.lastName}</td>
-                                        <td>{user.username}</td>
-                                        <td>{user?.verified || user?.verifiedVet || user?.verifiedFeedSupplier ? "✓" : "x"}</td>
-                                        <td><button onClick={() => openUserModal(user?.id)}>View Details</button></td>
+                                        <td className="px-4 py-2">{user?.email}</td>
+                                        <td className="px-4 py-2">{user?.firstName + " " + user?.lastName}</td>
+                                        <td className="px-4 py-2">{user.username}</td>
+                                        <td className="px-4 py-2">{user?.verified || user?.verifiedVet || user?.verifiedFeedSupplier ? "✓" : "x"}</td>
+                                        <td className="px-4 py-2"><button onClick={() => openUserModal(user?.id)}>View Details</button></td>
                                     </tr>
                                 )
                             })}
