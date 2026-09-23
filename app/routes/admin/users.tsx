@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deletePinById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifySupplierUserById, unverifyUserById, unverifyVetUserById, verifySupplierUserById, verifyUserById } from "../../../firebase.config";
+import { deletePinById, disableUserById, enableUserById, getAllPosts, getAllUsers, getAllVerificationRequests, getAllVetPins, getPinsById, getUserById, getVerificationRequestById, handleVerificationRequest, unverifySupplierUserById, unverifyUserById, unverifyVetUserById, verifySupplierUserById, verifyUserById } from "../../../firebase.config";
 import type { Route } from "./+types/users";
 import Modal from "~/components/modal";
 import WideModal from "~/components/wideModal";
@@ -60,6 +60,15 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
             case "verifiedFeedSupplier":
                 unverifySupplierUserById(id);
                 break;
+        }
+        closeUserModal();
+    }
+
+    const toggleAccountDisabled = (id: string, isDisabled: boolean) => {
+        if (isDisabled) {
+            enableUserById(id);
+        } else {
+            disableUserById(id);
         }
         closeUserModal();
     }
@@ -135,6 +144,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                 <th className="px-4 py-2 text-left">Full Name</th>
                                 <th className="px-4 py-2 text-left">Username</th>
                                 <th className="px-4 py-2 text-left">Verified</th>
+                                <th className="px-4 py-2 text-left">Status</th>
                                 <th className="px-4 py-2 text-left">Actions</th>
                             </tr>
                         </thead>
@@ -146,6 +156,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                         <td className="px-4 py-2">{user?.firstName + " " + user?.lastName}</td>
                                         <td className="px-4 py-2">{user.username}</td>
                                         <td className="px-4 py-2">{user?.verified || user?.verifiedVet || user?.verifiedFeedSupplier ? "✓" : "x"}</td>
+                                        <td className="px-4 py-2">{user?.disabled ? "Disabled" : "Active"}</td>
                                         <td className="px-4 py-2"><button onClick={() => openUserModal(user?.id)}>View Details</button></td>
                                     </tr>
                                 )
@@ -225,6 +236,10 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         <div className="flex flex-row">
                             <b>Verifications: </b>
                             {getVerifications(currentUser?.id)}
+                        </div>
+                        <div className="flex flex-row">
+                            <b>Account Status: </b>
+                            {currentUser?.disabled ? "Disabled" : "Active"}
                         </div>
                     </div>
                     {
@@ -310,6 +325,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         (currentUser?.verifiedFeedSupplier) &&
                         <button onClick={() => removeVerificationStatus(currentUser?.id, "verifiedFeedSupplier")}>Remove Feed Supplier Verification</button>
                     }
+                    <button onClick={() => toggleAccountDisabled(currentUser?.id, currentUser?.disabled)}>
+                        {currentUser?.disabled ? "Enable Account" : "Disable Account"}
+                    </button>
                 </div>
             </WideModal>
         </div>
