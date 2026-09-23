@@ -183,6 +183,11 @@ export const deletePinById = async (id: string) => {
     await deleteDoc(pin);
 }
 
+export const updatePinById = async (id: string, data: { clinicName?: string; latitude?: number; longitude?: number }) => {
+    const pin = doc(db, "vetPins", id);
+    await updateDoc(pin, data);
+}
+
 export const getAllVetRecommendations = (setRecommendations: (arg0: {}[]) => void) => {
     const q = query(collection(db, "vetRecommendations"));
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
