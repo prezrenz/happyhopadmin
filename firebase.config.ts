@@ -87,6 +87,13 @@ export const verifyUserById = async (id: string) => {
     })
 }
 
+export const verifySupplierUserById = async (id: string) => {
+    const user = doc(db, "users", id);
+    await updateDoc(user, {
+        verifiedFeedSupplier: true
+    })
+}
+
 export const unverifyUserById = async (id: string) => {
     const user = doc(db, "users", id);
     await updateDoc(user, {
@@ -163,4 +170,29 @@ export const getPinsById = (pins: {}[], id: string) => {
 export const deletePinById = async (id: string) => {
     const pin = doc(db, "vetPins", id);
     await deleteDoc(pin);
+}
+
+export const getAllVetRecommendations = (setRecommendations: (arg0: {}[]) => void) => {
+    const q = query(collection(db, "vetRecommendations"));
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedRecommendations: {}[] = [];
+        QuerySnapshot.forEach((doc) => {
+            fetchedRecommendations.push({ ...doc.data(), id: doc.id });
+        });
+        setRecommendations(fetchedRecommendations);
+    });
+    return unsubscribe;
+}
+
+export const getVetRecommendationById = (recommendations: {}[], id: string) => {
+    return recommendations.filter((rec: any) => rec?.id == id)[0];
+}
+
+export const approveVetRecommendation = async (id: string) => {
+    const recommendation = doc(db, "vetRecommendations", id);
+    await updateDoc(recommendation, {
+        approved: true,
+        status: "approved",
+        approvedBy: auth.currentUser?.uid ?? null
+    })
 }
