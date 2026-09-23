@@ -37,9 +37,20 @@ export default function Training({ loaderData }: Route.ComponentProps) {
 				<p><b>7.</b>  When satisfied with the results, press Export Model and export a TFLite model with Quantized selected.</p>
 				<img className="rounded-2xl border-1" src="/training-steps/step-7.png" />
 			</div>
-			<div className="rounded-2xl bg-orange-100 border-1 p-4 m-3">
-				<p><b>8.</b>  Put the exported tflite file and labels text file to the Android project's assets folder. Replace the existing file if any and release a new app build with the newly trained model.</p>
-			</div>
+	<div className="rounded-2xl bg-orange-100 border-1 p-4 m-3">
+    <p>
+        <b>8.</b> Put the exported tflite file and labels text file to the Android
+        project's assets folder. Replace the existing file if any and release a
+        new app build with the newly trained model. You can find the exported
+        model files <a
+            href="https://drive.google.com/drive/u/1/folders/1crtSqOYJqtE7fbiZ_YipS2R0kThZUziX"
+            className="font-bold text-blue-500"
+            target="_blank"
+            rel="noopener noreferrer"
+        >here</a>.
+    </p>
+    <img className="rounded-2xl border-1" src="/training-steps/step-8.png" />
+</div>
         </div>
     );
 }
