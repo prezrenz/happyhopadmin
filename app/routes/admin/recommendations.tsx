@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllVetRecommendations, getVetRecommendationById, getUserById, getAllUsers, approveVetRecommendation } from "../../../firebase.config";
+import { getAllVetRecommendations, getVetRecommendationById, getUserById, getAllUsers, approveVetRecommendation, deleteVetRecommendation } from "../../../firebase.config";
 import type { Route } from "./+types/recommendations";
 import Modal from "~/components/modal";
 
@@ -25,6 +25,14 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
 
     const approveRecommendation = (id: string) => {
         approveVetRecommendation(id);
+        closeModal();
+    }
+
+    const deleteRecommendation = (id: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this recommendation? This cannot be undone.");
+        if (!confirmed) return;
+
+        deleteVetRecommendation(id);
         closeModal();
     }
 
@@ -94,7 +102,10 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                                         <td>{getVetName(rec?.vetUid)}</td>
                                         <td>{rec?.breed}</td>
                                         <td>{rec?.status}</td>
-                                        <td><button onClick={() => openModal(rec?.id)}>View Details</button></td>
+                                        <td>
+                                            <button onClick={() => openModal(rec?.id)}>View Details</button>
+                                            <button onClick={() => deleteRecommendation(rec?.id)}>Delete</button>
+                                        </td>
                                     </tr>
                                 )
                             })}
@@ -149,8 +160,12 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                         (currentRecommendation?.status === "pending_approval") &&
                         <button onClick={() => approveRecommendation(currentRecommendation?.id)}>Approve</button>
                     }
+                    {
+                        (currentRecommendation?.status === "approved" || currentRecommendation?.approved) &&
+                        <button onClick={() => deleteRecommendation(currentRecommendation?.id)}>Delete</button>
+                    }
                 </div>
             </Modal>
         </div>
     );
-}
+}   
