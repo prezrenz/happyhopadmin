@@ -100,7 +100,7 @@ export default function Training({ loaderData }: Route.ComponentProps) {
                     <b>8.</b> Put the exported tflite file and labels text file
                     to the Android project's assets folder. Replace the
                     existing file if any and release a new app build with the
-                    newly trained model. You can find the exported model files{" "}
+                    newly trained models{" "}.
                     <a
                         href="https://drive.google.com/drive/u/1/folders/1crtSqOYJqtE7fbiZ_YipS2R0kThZUziX"
                         className="font-bold text-blue-500"
