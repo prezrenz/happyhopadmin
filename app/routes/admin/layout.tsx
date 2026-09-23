@@ -119,7 +119,7 @@ export default function AdminLayout() {
                         <div className="flex flex-row p-4">
                             <button className="hover:font-bold w-full flex items-center text-[12px]" onClick={() => signOut(auth)}>
                                 <MdLogout className="m-2 w-5 h-5"/>
-                                <span>Logout</span>
+                             <span className="text-red-500">Logout</span>
                             </button>
                         </div>
                     </aside>
