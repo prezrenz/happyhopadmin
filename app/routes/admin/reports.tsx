@@ -43,33 +43,29 @@ export default function Reports() {
 
             {reports
                 .filter((report: any) => !report.handled)
-                .map((report: any) => {
-                    return (
-                        <ReportCard
-                            key={report.id}
-                            report={report}
-                            reporter={getUserById(users, report?.reportedBy)}
-                            post={getPostById(posts, report?.postId)}
-                            handleReport={handleReport}
-                            deleteAndHandleReport={deleteAndHandleReport}
-                        />
-                    );
-                })}
+                .map((report: any) => (
+                    <ReportCard
+                        key={report.id}
+                        report={report}
+                        reporter={getUserById(users, report?.reportedBy)}
+                        post={getPostById(posts, report?.postId)}
+                        handleReport={handleReport}
+                        deleteAndHandleReport={deleteAndHandleReport}
+                    />
+                ))}
 
             {reports
                 .filter((report: any) => report.handled)
-                .map((report: any) => {
-                    return (
-                        <ReportCard
-                            key={report.id}
-                            report={report}
-                            reporter={getUserById(users, report?.reportedBy)}
-                            post={getPostById(posts, report?.postId)}
-                            handleReport={handleReport}
-                            deleteAndHandleReport={deleteAndHandleReport}
-                        />
-                    );
-                })}
+                .map((report: any) => (
+                    <ReportCard
+                        key={report.id}
+                        report={report}
+                        reporter={getUserById(users, report?.reportedBy)}
+                        post={getPostById(posts, report?.postId)}
+                        handleReport={handleReport}
+                        deleteAndHandleReport={deleteAndHandleReport}
+                    />
+                ))}
         </div>
     );
 }
