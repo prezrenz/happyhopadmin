@@ -111,7 +111,7 @@ export default function Training({ loaderData }: Route.ComponentProps) {
                     </a>.
                 </p>
                 <img
-                    className="rounded-2xl border-1"
+                    className="rounded-2xl border-1 w-auto max-w-full"
                     src="/training-steps/step-8.png"
                 />
             </div>
