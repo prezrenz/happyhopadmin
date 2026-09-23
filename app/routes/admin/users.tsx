@@ -90,6 +90,14 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         closeUserModal();
     }
 
+    const getVetPins = () => {
+        return currentPins.filter((pin: any) => pin?.type === "vet");
+    }
+
+    const getFeedPins = () => {
+        return currentPins.filter((pin: any) => pin?.type === "feed");
+    }
+
     useEffect(() => {
         return getAllPosts(setPosts);
     }, []);
@@ -107,7 +115,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
     }, []);
 
     useEffect(() => {
-        if (currentUser?.verified || currentUser?.verifiedFeedSupplier) {
+        if (currentUser?.verified || currentUser?.verifiedVet || currentUser?.verifiedFeedSupplier) {
             setCurrentPins(getPinsById(pins, currentUser?.id));
         } else {
             setCurrentPins([{}]);
@@ -224,36 +232,73 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                         <img className="object-scale-down max-w-1/12 m-auto" src={currentUser?.imageUrl} />
                     }
                 </div>
-                <h1 className="font-bold text-2xl">
-                    {currentUser?.verifiedFeedSupplier ? "Feed Supplier Map Pins" : "Vet Map Pins"}
-                </h1>
                 {
-                    (currentPins.length <= 0) || (!currentUser?.verified && !currentUser?.verifiedFeedSupplier) ?
-                        <p>This user has no map pins.</p> :
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Submitted At</th>
-                                    <th>Clinic Name</th>
-                                    <th>Type</th>
-                                    <th>Latitude</th>
-                                    <th>Longitude</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentPins.map((pin: any) => {
-                                    return (
-                                        <tr key={pin?.id}>
-                                            <td>{pin?.clinicName}</td>
-                                            <td>{(pin?.type === "vet") ? "Veterinary Clinic" : "Feed Supplier"}</td>
-                                            <td>{pin?.latitude}</td>
-                                            <td>{pin?.longitude}</td>
-                                            <td><button onClick={() => deleteMapPin(pin?.id)}>Delete</button></td>
+                    (currentUser?.verified || currentUser?.verifiedVet) &&
+                    <>
+                        <h1 className="font-bold text-2xl">Vet Map Pins</h1>
+                        {
+                            getVetPins().length <= 0 ?
+                                <p>This user has no veterinary clinic map pins.</p> :
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Submitted At</th>
+                                            <th>Clinic Name</th>
+                                            <th>Type</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
                                         </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        {getVetPins().map((pin: any) => {
+                                            return (
+                                                <tr key={pin?.id}>
+                                                    <td>{pin?.clinicName}</td>
+                                                    <td>Veterinary Clinic</td>
+                                                    <td>{pin?.latitude}</td>
+                                                    <td>{pin?.longitude}</td>
+                                                    <td><button onClick={() => deleteMapPin(pin?.id)}>Delete</button></td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                        }
+                    </>
+                }
+                {
+                    (currentUser?.verifiedFeedSupplier) &&
+                    <>
+                        <h1 className="font-bold text-2xl">Feed Supplier Map Pins</h1>
+                        {
+                            getFeedPins().length <= 0 ?
+                                <p>This user has no feed supplier map pins.</p> :
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Submitted At</th>
+                                            <th>Store Name</th>
+                                            <th>Type</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {getFeedPins().map((pin: any) => {
+                                            return (
+                                                <tr key={pin?.id}>
+                                                    <td>{pin?.clinicName}</td>
+                                                    <td>Feed Supplier</td>
+                                                    <td>{pin?.latitude}</td>
+                                                    <td>{pin?.longitude}</td>
+                                                    <td><button onClick={() => deleteMapPin(pin?.id)}>Delete</button></td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                        }
+                    </>
                 }
                 <div className="flex flex-row">
                     <button onClick={closeUserModal}>Close</button>
