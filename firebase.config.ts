@@ -112,6 +112,20 @@ export const unverifySupplierUserById = async (id: string) => {
     })
 }
 
+export const disableUserById = async (id: string) => {
+    const user = doc(db, "users", id);
+    await updateDoc(user, {
+        disabled: true
+    })
+}
+
+export const enableUserById = async (id: string) => {
+    const user = doc(db, "users", id);
+    await updateDoc(user, {
+        disabled: false
+    })
+}
+
 export const getReportById = (reports: {}[], id: string) => {
     return reports.filter((report: any) => report?.id == id)[0];
 }
