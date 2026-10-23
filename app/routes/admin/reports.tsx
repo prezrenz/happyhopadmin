@@ -39,7 +39,7 @@ export default function ReportCard({
     const username = pick(reporter, "username", "userName", "user_name");
     const email = pick(reporter, "email", "Email");
     const verified = pick(reporter, "verified", "isVerified");
-    const image = pick(post, "imageUrl", "image", "photoUrl", "photo", "img", "url");
+    const image = pick(post, "imageUrl", "image", "photoUl", "photo", "img", "url");
     const reasons = formatReasons(pick(report, "reasons", "reason"));
     const timestamp = formatTimestamp(pick(report, "timestamp", "createdAt", "date"));
 
