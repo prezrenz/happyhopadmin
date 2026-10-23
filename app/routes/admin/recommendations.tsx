@@ -14,6 +14,29 @@ export function loader() {
     return { name: "Recommendations" };
 }
 
+const tableWrapperClass =
+    "mx-auto mt-3 w-[90%] overflow-hidden rounded border-2 border-black";
+const tableClass =
+    "w-full table-fixed border-separate border-spacing-2 text-xs";
+const thClass =
+    "border border-black bg-orange-100 px-2 py-3 text-center font-normal";
+const tdClass =
+    "break-words border border-black px-2 py-3 text-center align-middle";
+const actionButtonClass =
+    "rounded-lg border-2 border-black bg-white px-3 py-1 text-xs hover:bg-orange-100";
+
+const renderFillerRows = (columns: number) =>
+    [0, 1, 2].map((row) => (
+        <tr key={`filler-${row}`}>
+            {Array.from({ length: columns }).map((_, col) => (
+                <td
+                    key={`filler-${row}-${col}`}
+                    className="h-10 border border-black"
+                ></td>
+            ))}
+        </tr>
+    ));
+
 export default function Recommendations({ loaderData }: Route.ComponentProps) {
     const [users, setUsers] = useState<any[]>([]);
     const [recommendations, setRecommendations] = useState<any[]>([]);
@@ -81,23 +104,23 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                         There are currently no pending recommendations.
                     </p>
                 ) : (
-                    <div className="mx-auto w-[90%] overflow-hidden border border-black">
-                        <table className="w-full table-fixed border-collapse text-[11px]">
+                    <div className={tableWrapperClass}>
+                        <table className={tableClass}>
                             <thead>
                                 <tr>
-                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[25%]`}>
                                         Submitted At
                                     </th>
-                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[20%]`}>
                                         Vet
                                     </th>
-                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[20%]`}>
                                         Breed
                                     </th>
-                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[15%]`}>
                                         Status
                                     </th>
-                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[20%]`}>
                                         Actions
                                     </th>
                                 </tr>
@@ -106,27 +129,27 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                             <tbody>
                                 {pendingRecommendations.map((rec: any) => (
                                     <tr key={rec?.id}>
-                                        <td className="border border-black px-2 py-2 align-middle">
+                                        <td className={tdClass}>
                                             {rec?.createdAt
                                                 ?.toDate()
                                                 ?.toString()}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center align-middle">
+                                        <td className={tdClass}>
                                             {getVetName(rec?.vetUid)}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center align-middle">
+                                        <td className={tdClass}>
                                             {rec?.breed}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center align-middle">
+                                        <td className={tdClass}>
                                             {rec?.status}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center align-middle">
+                                        <td className={tdClass}>
                                             <button
-                                                className="rounded border border-black bg-white px-2 py-1 text-[10px] hover:bg-orange-100"
+                                                className={actionButtonClass}
                                                 onClick={() =>
                                                     openModal(rec?.id)
                                                 }
@@ -137,29 +160,7 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                                     </tr>
                                 ))}
 
-                                <tr>
-                                    <td className="h-8 border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
-
-                                <tr>
-                                    <td className="h-8 border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
-
-                                <tr>
-                                    <td className="h-8 border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
+                                {renderFillerRows(5)}
                             </tbody>
                         </table>
                     </div>
@@ -174,23 +175,23 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                         No recommendations have been approved so far.
                     </p>
                 ) : (
-                    <div className="mx-auto mt-3 w-[90%] overflow-hidden border border-black">
-                        <table className="w-full table-fixed border-collapse text-[11px]">
+                    <div className={tableWrapperClass}>
+                        <table className={tableClass}>
                             <thead>
                                 <tr>
-                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[25%]`}>
                                         Submitted At
                                     </th>
-                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[20%]`}>
                                         Vet
                                     </th>
-                                    <th className="w-[20%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[20%]`}>
                                         Breed
                                     </th>
-                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[15%]`}>
                                         Status
                                     </th>
-                                    <th className="w-[15%] border border-black bg-orange-100 px-2 py-2 font-normal">
+                                    <th className={`${thClass} w-[20%]`}>
                                         Actions
                                     </th>
                                 </tr>
@@ -199,28 +200,28 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                             <tbody>
                                 {approvedRecommendations.map((rec: any) => (
                                     <tr key={rec?.id}>
-                                        <td className="border border-black px-2 py-2">
+                                        <td className={tdClass}>
                                             {rec?.createdAt
                                                 ?.toDate()
                                                 ?.toString()}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center">
+                                        <td className={tdClass}>
                                             {getVetName(rec?.vetUid)}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center">
+                                        <td className={tdClass}>
                                             {rec?.breed}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center">
+                                        <td className={tdClass}>
                                             {rec?.status}
                                         </td>
 
-                                        <td className="border border-black px-2 py-2 text-center">
+                                        <td className={tdClass}>
                                             <div className="flex justify-center gap-1">
                                                 <button
-                                                    className="rounded border border-black bg-white px-2 py-1 text-[10px] hover:bg-orange-100"
+                                                    className={actionButtonClass}
                                                     onClick={() =>
                                                         openModal(rec?.id)
                                                     }
@@ -229,7 +230,7 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                                                 </button>
 
                                                 <button
-                                                    className="rounded border border-black bg-white px-2 py-1 text-[10px] hover:bg-red-50"
+                                                    className="rounded-lg border-2 border-black bg-white px-3 py-1 text-xs hover:bg-red-50"
                                                     onClick={() =>
                                                         deleteRecommendation(
                                                             rec?.id
@@ -243,29 +244,7 @@ export default function Recommendations({ loaderData }: Route.ComponentProps) {
                                     </tr>
                                 ))}
 
-                                <tr>
-                                    <td className="h-8 border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
-
-                                <tr>
-                                    <td className="h-8 border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
-
-                                <tr>
-                                    <td className="h-8 border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
+                                {renderFillerRows(5)}
                             </tbody>
                         </table>
                     </div>

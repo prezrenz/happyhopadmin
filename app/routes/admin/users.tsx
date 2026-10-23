@@ -26,6 +26,29 @@ export function loader() {
     return { name: "React Router" };
 }
 
+const tableWrapperClass =
+    "w-full max-w-6xl overflow-hidden rounded border-2 border-black";
+const tableClass =
+    "w-full table-fixed border-separate border-spacing-2 text-xs";
+const thClass =
+    "border border-black bg-orange-100 px-2 py-3 text-center font-normal";
+const tdClass =
+    "break-words border border-black px-2 py-3 text-center align-middle";
+const actionButtonClass =
+    "rounded-lg border-2 border-black bg-white px-3 py-1 text-xs hover:bg-orange-100";
+
+const renderFillerRows = (columns: number) =>
+    [0, 1, 2].map((row) => (
+        <tr key={`filler-${row}`}>
+            {Array.from({ length: columns }).map((_, col) => (
+                <td
+                    key={`filler-${row}-${col}`}
+                    className="h-10 border border-black"
+                ></td>
+            ))}
+        </tr>
+    ));
+
 export default function Reports({ loaderData }: Route.ComponentProps) {
     const [users, setUsers] = useState([{}]);
     const [verificationRequests, setVerificationRequests] = useState([{}]);
@@ -352,7 +375,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                 )}
             </div>
 
-            <div className="w-full max-w-6xl overflow-hidden rounded-lg border border-black">
+            <div className={tableWrapperClass}>
                 {getFilteredUsers().length <= 0 ? (
                     <div className="p-6 text-center">
                         {searchQuery
@@ -360,25 +383,25 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                             : "There are currently no users."}
                     </div>
                 ) : (
-                    <table className="w-full border-collapse text-sm">
+                    <table className={tableClass}>
                         <thead>
-                            <tr className="border-b border-black bg-orange-100">
-                                <th className="px-6 py-4 text-left font-bold">
+                            <tr>
+                                <th className={`${thClass} w-[28%]`}>
                                     Email
                                 </th>
-                                <th className="px-6 py-4 text-left font-bold">
+                                <th className={`${thClass} w-[20%]`}>
                                     Full Name
                                 </th>
-                                <th className="px-6 py-4 text-left font-bold">
+                                <th className={`${thClass} w-[20%]`}>
                                     Username
                                 </th>
-                                <th className="px-6 py-4 text-center font-bold">
+                                <th className={`${thClass} w-[10%]`}>
                                     Verified
                                 </th>
-                                <th className="px-6 py-4 text-center font-bold">
+                                <th className={`${thClass} w-[10%]`}>
                                     Status
                                 </th>
-                                <th className="px-6 py-4 text-center font-bold">
+                                <th className={`${thClass} w-[12%]`}>
                                     Actions
                                 </th>
                             </tr>
@@ -386,37 +409,34 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
 
                         <tbody>
                             {getFilteredUsers().map((user: any) => (
-                                <tr
-                                    key={user?.id}
-                                    className="border-b border-black last:border-b-0"
-                                >
-                                    <td className="px-6 py-5">
+                                <tr key={user?.id}>
+                                    <td className={tdClass}>
                                         {user?.email}
                                     </td>
 
-                                    <td className="px-6 py-5">
+                                    <td className={tdClass}>
                                         {user?.firstName} {user?.lastName}
                                     </td>
 
-                                    <td className="px-6 py-5">
+                                    <td className={tdClass}>
                                         {user?.username}
                                     </td>
 
-                                    <td className="px-6 py-5 text-center">
+                                    <td className={tdClass}>
                                         {user?.verified ||
                                         user?.verifiedVet ||
                                         user?.verifiedFeedSupplier ? (
-                                            <span className="text-2xl font-bold text-green-500">
+                                            <span className="text-xl font-bold text-green-500">
                                                 ✓
                                             </span>
                                         ) : (
-                                            <span className="text-2xl font-bold text-red-500">
+                                            <span className="text-xl font-bold text-red-500">
                                                 ✕
                                             </span>
                                         )}
                                     </td>
 
-                                    <td className="px-6 py-5 text-center">
+                                    <td className={tdClass}>
                                         <span
                                             className={
                                                 user?.disabled
@@ -430,9 +450,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                         </span>
                                     </td>
 
-                                    <td className="px-6 py-5 text-center">
+                                    <td className={tdClass}>
                                         <button
-                                            className="rounded-md border border-black bg-white px-3 py-2 hover:bg-orange-100"
+                                            className={actionButtonClass}
                                             onClick={() =>
                                                 openUserModal(user?.id)
                                             }
@@ -442,6 +462,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                     </td>
                                 </tr>
                             ))}
+
+                            {renderFillerRows(6)}
                         </tbody>
                     </table>
                 )}
@@ -451,31 +473,31 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                 Verification Requests
             </h1>
 
-            <div className="w-full max-w-6xl overflow-hidden rounded-lg border border-black">
+            <div className={tableWrapperClass}>
                 {verificationRequests.length <= 0 ? (
                     <p className="p-6 text-center">
                         No Verification Requests so far.
                     </p>
                 ) : (
-                    <table className="w-full border-collapse text-sm">
+                    <table className={tableClass}>
                         <thead>
-                            <tr className="border-b border-black bg-orange-100">
-                                <th className="px-5 py-3 text-left font-bold">
+                            <tr>
+                                <th className={`${thClass} w-[22%]`}>
                                     Submitted At
                                 </th>
-                                <th className="px-5 py-3 text-left font-bold">
+                                <th className={`${thClass} w-[24%]`}>
                                     User Email
                                 </th>
-                                <th className="px-5 py-3 text-left font-bold">
+                                <th className={`${thClass} w-[18%]`}>
                                     Name
                                 </th>
-                                <th className="px-5 py-3 text-left font-bold">
+                                <th className={`${thClass} w-[14%]`}>
                                     Type
                                 </th>
-                                <th className="px-5 py-3 text-left font-bold">
+                                <th className={`${thClass} w-[10%]`}>
                                     Status
                                 </th>
-                                <th className="px-5 py-3 text-center font-bold">
+                                <th className={`${thClass} w-[12%]`}>
                                     Actions
                                 </th>
                             </tr>
@@ -483,25 +505,22 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
 
                         <tbody>
                             {verificationRequests.map((request: any) => (
-                                <tr
-                                    key={request?.id}
-                                    className="border-b border-black last:border-b-0"
-                                >
-                                    <td className="px-5 py-4">
+                                <tr key={request?.id}>
+                                    <td className={tdClass}>
                                         {request?.submittedAt
                                             ?.toDate()
                                             ?.toString()}
                                     </td>
 
-                                    <td className="px-5 py-4">
+                                    <td className={tdClass}>
                                         {request?.userEmail}
                                     </td>
 
-                                    <td className="px-5 py-4">
+                                    <td className={tdClass}>
                                         {getSubmitterName(request?.userId)}
                                     </td>
 
-                                    <td className="px-5 py-4">
+                                    <td className={tdClass}>
                                         {request?.verificationType ===
                                         "feed_supplier"
                                             ? "Feed Supplier"
@@ -509,7 +528,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                     </td>
 
                                     <td
-                                        className={`px-5 py-4 font-semibold ${
+                                        className={`${tdClass} font-semibold ${
                                             request?.status === "approved"
                                                 ? "text-green-500"
                                                 : request?.status ===
@@ -521,9 +540,9 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                         {request?.status}
                                     </td>
 
-                                    <td className="px-5 py-4 text-center">
+                                    <td className={tdClass}>
                                         <button
-                                            className="rounded-md border border-black bg-white px-3 py-2 hover:bg-orange-100"
+                                            className={actionButtonClass}
                                             onClick={() =>
                                                 openModal(request?.id)
                                             }
@@ -533,6 +552,8 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
                                     </td>
                                 </tr>
                             ))}
+
+                            {renderFillerRows(6)}
                         </tbody>
                     </table>
                 )}
