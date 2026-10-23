@@ -48,7 +48,7 @@ export default function ReportCard({
 
             <div className="flex flex-row px-4 py-2">
                 <b>Timestamp: </b>
-                {report?.timestamp?.toDate()?.toString()}
+                {report?.timestamp?.toDate()?.toString()?.replace(/ GMT.*$/, "")}
             </div>
 
             <div className="flex flex-row px-4 py-2">
@@ -69,7 +69,7 @@ export default function ReportCard({
 
                 <div className="flex flex-row">
                     <b>Posted On: </b>
-                    {post?.timestamp?.toDate()?.toString()}
+                    {post?.timestamp?.toDate()?.toString()?.replace(/ GMT.*$/, "")}
                 </div>
 
                 <div className="flex flex-row">

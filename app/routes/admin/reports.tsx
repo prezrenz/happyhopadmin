@@ -1,108 +1,72 @@
-const pick = (obj: any, ...keys: string[]) => {
-    for (const key of keys) {
-        if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
-            return obj[key];
-        }
-    }
-    return "";
-};
+import type { Route } from "./+types/reports";
+import {
+    deletePostById,
+    getAllPosts,
+    getAllReports,
+    getAllUsers,
+    getPostById,
+    getUserById,
+    handleReport
+} from "../../../firebase.config";
+import { useEffect, useState } from "react";
+import ReportCard from "~/components/report-card";
 
-const formatTimestamp = (value: any) => {
-    if (!value) return "";
-    if (typeof value?.toDate === "function") {
-        return value.toDate().toString().replace(/ GMT.*$/, "");
-    }
-    return String(value).replace(/ GMT.*$/, "");
-};
+export function loader() {
+    return { name: "Reports" };
+}
 
-const formatReasons = (value: any) => {
-    if (Array.isArray(value)) return value.join(", ");
-    return value ? String(value) : "";
-};
+export default function Reports() {
+    const [users, setUsers] = useState([{}]);
+    const [reports, setReports] = useState([{}]);
+    const [posts, setPosts] = useState([{}]);
 
-type ReportCardProps = {
-    report: any;
-    reporter: any;
-    post: any;
-    handleReport: (id: string) => void;
-    deleteAndHandleReport: (id: string, postId: string) => void;
-};
+    const deleteAndHandleReport = (id: string, postId: string) => {
+        deletePostById(postId);
+        handleReport(id);
+    };
 
-export default function ReportCard({
-    report,
-    reporter,
-    post,
-    handleReport,
-    deleteAndHandleReport,
-}: ReportCardProps) {
-    const fullName = pick(reporter, "fullName", "fullname", "full_name", "name", "displayName");
-    const username = pick(reporter, "username", "userName", "user_name");
-    const email = pick(reporter, "email", "Email");
-    const verified = pick(reporter, "verified", "isVerified");
-    const image = pick(post, "imageUrl", "image", "photoUl", "photo", "img", "url");
-    const reasons = formatReasons(pick(report, "reasons", "reason"));
-    const timestamp = formatTimestamp(pick(report, "timestamp", "createdAt", "date"));
+    useEffect(() => {
+        return getAllReports(setReports);
+    }, []);
+
+    useEffect(() => {
+        return getAllPosts(setPosts);
+    }, []);
+
+    useEffect(() => {
+        return getAllUsers(setUsers);
+    }, []);
 
     return (
-        <div className="w-[95%] my-4 p-4 border border-black rounded-2xl bg-orange-100">
-            <h2 className="text-center font-bold text-2xl mb-4">
-                Reported By: {fullName}
-            </h2>
+        <div className="flex flex-col items-center">
+            <h1 className="font-bold text-2xl">Reports</h1>
 
-            <div className="flex justify-between mb-3">
-                <span className="font-bold">Email:</span>
-                <span>{email}</span>
-            </div>
+            {reports
+                .filter((report: any) => !report.handled)
+                .map((report: any) => (
+                    <ReportCard
+                        key={report.id}
+                        report={report}
+                        reporter={getUserById(users, report?.reportedBy)}
+                        post={getPostById(posts, report?.postId)}
+                        handleReport={handleReport}
+                        deleteAndHandleReport={deleteAndHandleReport}
+                    />
+                ))}
 
-            <div className="flex justify-between mb-3">
-                <span className="font-bold">Full Name:</span>
-                <span>{fullName}</span>
-            </div>
-
-            <div className="flex justify-between mb-3">
-                <span className="font-bold">Username:</span>
-                <span>{username}</span>
-            </div>
-
-            <div className="flex justify-between mb-3">
-                <span className="font-bold">Verified:</span>
-                <span>{verified === true || verified === "true" ? "Yes" : "No"}</span>
-            </div>
-
-            <p className="mb-3">
-                <span className="font-bold">Timestamp: </span>
-                {timestamp}
-            </p>
-
-            <p className="mb-3">
-                <span className="font-bold">Reasons: </span>
-                {reasons}
-            </p>
-
-            {image && (
-                <img
-                    src={image}
-                    alt="Reported post"
-                    className="w-full max-h-96 object-cover border border-black mb-3"
-                />
-            )}
-
-            {!report?.handled && (
-                <div className="flex gap-3 justify-end">
-                    <button
-                        className="px-4 py-2 rounded-lg bg-green-600 text-white font-bold"
-                        onClick={() => handleReport(report.id)}
-                    >
-                        Dismiss
-                    </button>
-                    <button
-                        className="px-4 py-2 rounded-lg bg-red-600 text-white font-bold"
-                        onClick={() => deleteAndHandleReport(report.id, report.postId)}
-                    >
-                        Delete Post
-                    </button>
-                </div>
-            )}
+            {reports
+                .filter((report: any) => report.handled)
+                .map((report: any) => (
+                    <ReportCard
+                        key={report.id}
+                        report={report}
+                        reporter={getUserById(users, report?.reportedBy)}
+                        post={getPostById(posts, report?.postId)}
+                        handleReport={handleReport}
+                        deleteAndHandleReport={deleteAndHandleReport}
+                    />
+                ))}
         </div>
     );
 }
+
