@@ -27,7 +27,7 @@ export function loader() {
 }
 
 const tableWrapperClass =
-    "w-full max-w-6xl overflow-hidden rounded border-2 border-black";
+    "w-full max-w-6xl overflow-auto rounded border-2 border-black";
 const tableClass =
     "w-full table-fixed border-separate border-spacing-2 text-xs";
 const thClass =
@@ -276,7 +276,7 @@ export default function Reports({ loaderData }: Route.ComponentProps) {
         }
 
         return (
-            <div className="overflow-hidden rounded-lg border border-black">
+            <div className="overflow-auto rounded-lg border border-black">
                 <table className="w-full border-collapse text-sm">
                     <thead>
                         <tr className="border-b border-black bg-orange-100">

@@ -120,7 +120,7 @@ export default function Submissions({ loaderData }: Route.ComponentProps) {
                         these filters.
                     </p>
                 ) : (
-                    <div className="mx-auto w-[90%] overflow-hidden border border-black">
+                    <div className="mx-auto w-[90%] overflow-auto border border-black">
                         <table className="w-full table-fixed border-collapse text-[10px]">
                             <thead>
                                 <tr>
