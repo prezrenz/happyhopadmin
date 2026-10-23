@@ -26,33 +26,33 @@ export default function ReportCard({
                 </h2>
             </div>
 
-            <div className="flex flex-row justify-between px-4 py-2">
-                <b>Email: </b>
+            <div className="flex flex-row gap-2 px-4 py-2">
+                <b>Email:</b>
                 {reporter?.email}
             </div>
 
-            <div className="flex flex-row justify-between px-4 py-2">
-                <b>Full Name: </b>
+            <div className="flex flex-row gap-2 px-4 py-2">
+                <b>Full Name:</b>
                 {reporter?.firstName} {reporter?.lastName}
             </div>
 
-            <div className="flex flex-row justify-between px-4 py-2">
-                <b>Username: </b>
+            <div className="flex flex-row gap-2 px-4 py-2">
+                <b>Username:</b>
                 {reporter?.username}
             </div>
 
-            <div className="flex flex-row justify-between px-4 py-2">
-                <b>Verified: </b>
+            <div className="flex flex-row gap-2 px-4 py-2">
+                <b>Verified:</b>
                 {reporter?.verified ? "Yes" : "No"}
             </div>
 
-            <div className="flex flex-row px-4 py-2">
-                <b>Timestamp: </b>
+            <div className="flex flex-row gap-2 px-4 py-2">
+                <b>Timestamp:</b>
                 {report?.timestamp?.toDate()?.toString()?.replace(/ GMT.*$/, "")}
             </div>
 
-            <div className="flex flex-row px-4 py-2">
-                <b>Reasons: </b>
+            <div className="flex flex-row gap-2 px-4 py-2">
+                <b>Reasons:</b>
                 {report?.reasons?.join(", ")}
             </div>
 
@@ -62,28 +62,28 @@ export default function ReportCard({
                     src={post?.postImage}
                 />
 
-                <div className="flex flex-row">
-                    <b>Poster Name: </b>
+                <div className="flex flex-row gap-2">
+                    <b>Poster Name:</b>
                     {post?.posterName}
                 </div>
 
-                <div className="flex flex-row">
-                    <b>Posted On: </b>
+                <div className="flex flex-row gap-2">
+                    <b>Posted On:</b>
                     {post?.timestamp?.toDate()?.toString()?.replace(/ GMT.*$/, "")}
                 </div>
 
-                <div className="flex flex-row">
-                    <b>Post Text: </b>
+                <div className="flex flex-row gap-2">
+                    <b>Post Text:</b>
                     {post?.post}
                 </div>
 
-                <div className="flex flex-row">
-                    <b>Like Count: </b>
+                <div className="flex flex-row gap-2">
+                    <b>Like Count:</b>
                     {post?.likesCount}
                 </div>
 
-                <div className="flex flex-row">
-                    <b>Comment Count: </b>
+                <div className="flex flex-row gap-2">
+                    <b>Comment Count:</b>
                     {post?.commentCount}
                 </div>
             </div>
