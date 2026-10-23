@@ -17,7 +17,7 @@ export default function AdminLayout() {
         <>
             <main className="w-full flex flex-col">
                 <div className="h-full flex flex-row">
-                    <aside id="sidebar">
+                    <aside id="sidebar" style={{ backgroundColor: "#fff7ed" }}>
                         <div className="flex flex-row items-center">
                             <img className="object-scale-down w-16 h-auto p-1" src="/logo.png" />
                             <div className="p-1 font-bold text-[16px]">
