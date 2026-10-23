@@ -1,4 +1,24 @@
-import { Timestamp } from "firebase/firestore";
+const pick = (obj: any, ...keys: string[]) => {
+    for (const key of keys) {
+        if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+            return obj[key];
+        }
+    }
+    return "";
+};
+
+const formatTimestamp = (value: any) => {
+    if (!value) return "";
+    if (typeof value?.toDate === "function") {
+        return value.toDate().toString().replace(/ GMT.*$/, "");
+    }
+    return String(value).replace(/ GMT.*$/, "");
+};
+
+const formatReasons = (value: any) => {
+    if (Array.isArray(value)) return value.join(", ");
+    return value ? String(value) : "";
+};
 
 type ReportCardProps = {
     report: any;
@@ -8,29 +28,6 @@ type ReportCardProps = {
     deleteAndHandleReport: (id: string, postId: string) => void;
 };
 
-function formatTimestamp(value: any): string {
-    if (!value) return "";
-
-    const date =
-        value instanceof Timestamp
-            ? value.toDate()
-            : typeof value?.toDate === "function"
-              ? value.toDate()
-              : new Date(value);
-
-    if (isNaN(date.getTime())) return "";
-
-    return date.toLocaleString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-    });
-}
-
 export default function ReportCard({
     report,
     reporter,
@@ -38,53 +35,57 @@ export default function ReportCard({
     handleReport,
     deleteAndHandleReport,
 }: ReportCardProps) {
+    const fullName = pick(reporter, "fullName", "fullname", "full_name", "name", "displayName");
+    const username = pick(reporter, "username", "userName", "user_name");
+    const email = pick(reporter, "email", "Email");
+    const verified = pick(reporter, "verified", "isVerified");
+    const image = pick(post, "imageUrl", "image", "photoUrl", "photo", "img", "url");
+    const reasons = formatReasons(pick(report, "reasons", "reason"));
+    const timestamp = formatTimestamp(pick(report, "timestamp", "createdAt", "date"));
+
     return (
         <div className="w-[95%] my-4 p-4 border border-black rounded-2xl bg-orange-100">
             <h2 className="text-center font-bold text-2xl mb-4">
-                Reported By: {reporter?.fullName}
+                Reported By: {fullName}
             </h2>
 
             <div className="flex justify-between mb-3">
                 <span className="font-bold">Email:</span>
-                <span>{reporter?.email}</span>
+                <span>{email}</span>
             </div>
 
             <div className="flex justify-between mb-3">
                 <span className="font-bold">Full Name:</span>
-                <span>{reporter?.fullName}</span>
+                <span>{fullName}</span>
             </div>
 
             <div className="flex justify-between mb-3">
                 <span className="font-bold">Username:</span>
-                <span>{reporter?.username}</span>
+                <span>{username}</span>
             </div>
 
             <div className="flex justify-between mb-3">
                 <span className="font-bold">Verified:</span>
-                <span>{reporter?.verified ? "Yes" : "No"}</span>
+                <span>{verified === true || verified === "true" ? "Yes" : "No"}</span>
             </div>
 
             <p className="mb-3">
                 <span className="font-bold">Timestamp: </span>
-                {formatTimestamp(report?.timestamp)}
+                {timestamp}
             </p>
 
             <p className="mb-3">
                 <span className="font-bold">Reasons: </span>
-                {Array.isArray(report?.reasons)
-                    ? report.reasons.join(", ")
-                    : report?.reasons ?? report?.reason}
+                {reasons}
             </p>
 
-            {post?.imageUrl && (
+            {image && (
                 <img
-                    src={post.imageUrl}
+                    src={image}
                     alt="Reported post"
                     className="w-full max-h-96 object-cover border border-black mb-3"
                 />
             )}
-
-            {post?.caption && <p className="mb-3">{post.caption}</p>}
 
             {!report?.handled && (
                 <div className="flex gap-3 justify-end">
